@@ -1,0 +1,4 @@
+# Component dependencies manifest
+dependencies:
+  - name: lvgl/lvgl
+    version: "^8.3"
