@@ -121,24 +121,23 @@ static esp_err_t ssd1327_init(void)
 	ESP_RETURN_ON_ERROR(ssd1327_reset(), TAG, "reset failed");
 
 	const uint8_t init_seq[] = {
-		0xFD, 0x12, /* Command lock */
-		0xAE,       /* Display OFF */
-		0xA8, 0x5F, /* multiplex ratio: 0x5F * 1/64duty */
-		0xA1, 0x00, /* Display Start Line */
-		0xA2, 0x00, /* Display Offset */
-		0xA0, 0x51, /* remap */
-		0xAB, 0x01, /* Enable Internal VDD */
-		0x81, 0x53, /* Contrast */
-		0xB1, 0x51, /* Phase Length */
-		0xB3, 0x01, /* Front Clock Divider */
-		0xB9,       /* Linear LUT */
-		0xBC, 0x08, /* Precharge Voltage */
-		0xBE, 0x07, /* VCOMH Voltage */
-		           /* 0xD1, 0x82, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, */
-		0xB6, 0x01, /* Second Precharge Period */
-		0xD5, 0x62, /* Enable 2D Scroll */
-		// 0xB5, 0x03, /* Enable GPIO */
-		0xA4,       /* Display ON */
+		0xFD, 0x12, /* unlock display */
+		0xAE,       /* display off */
+		0xA8, 0x7F, /* multiplex ratio: 1/128 duty */
+		0xA1, 0x00, /* display start line */
+		0xA2, 0x00, /* display offset */
+		0xA0, 0x51, /* remap configuration */
+		0xAB, 0x01, /* enable internal VDD regulator */
+		0x81, 0x53, /* contrast */
+		0xB1, 0x51, /* phase length */
+		0xB3, 0x01, /* display clock divide ratio/oscillator frequency */
+		0xB9,       /* use linear lookup table */
+		0xBC, 0x08, /* pre-charge voltage level */
+		0xBE, 0x07, /* VCOMH voltage */
+		0xB6, 0x01, /* second precharge */
+		0xD5, 0x62, /* enable second precharge, internal vsl */
+		0xB5, 0x03, /* enable GPIO */
+		0xA4,       /* normal display mode */
 	};
 
 	return ssd1327_write_commands(init_seq, sizeof(init_seq));
